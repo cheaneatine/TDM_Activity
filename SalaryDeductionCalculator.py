@@ -18,6 +18,7 @@ def calculate_deductions(gross: float, sss: float, pagibig: float) -> SalaryDeta
     return SalaryDetails(gross, sss, philhealth, pagibig, TAX, total_deductions, gross - total_deductions)
 
 def display_breakdown(details: SalaryDetails) -> None:
+    #added formatted labels and currency
     print("\nSalary Breakdown\n" + "-" * 30)
     #used _asdict to avoid repitition
     for label, value in details._asdict().items():
