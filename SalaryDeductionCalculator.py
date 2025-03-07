@@ -1,30 +1,33 @@
-def compute_deductions(salary, sss, pagibig):
-    tax =  1875  #Assuming fixed value for simplicity. (gi hardcode nanako ang value since constant/fixed value nmn daw ni - eros)
-    philhealth = (salary * 0.05) / 2
-    deductions = sss + philhealth + pagibig + tax
-    net_salary = salary - deductions
+from typing import NamedTuple
 
-    return [salary, sss, philhealth, pagibig, tax, deductions, net_salary]
+#clearer function, better data structure
+#used namedtuple for better readability
+class SalaryDetails(NamedTuple):
+    gross: float
+    sss: float
+    philhealth: float
+    pagibig: float
+    tax: float
+    total_deductions: float
+    net: float
 
+def calculate_deductions(gross: float, sss: float, pagibig: float) -> SalaryDetails:
+    TAX = 1875  
+    philhealth = (gross * 0.05) / 2
+    total_deductions = sss + philhealth + pagibig + TAX
+    return SalaryDetails(gross, sss, philhealth, pagibig, TAX, total_deductions, gross - total_deductions)
 
-def display(results):
+def display_breakdown(details: SalaryDetails) -> None:
+    print("\nSalary Breakdown\n" + "-" * 30)
+    #used _asdict to avoid repitition
+    for label, value in details._asdict().items():
+        print(f"{label.replace('_', ' ').title():<22} ₱{value:,.2f}")
+    print("-" * 30)
 
-    print("Gross Salary:", results[0])
-    print("SSS Deduction:", results[1])
-    print("PhilHealth Deduction:", results[2])
-    print("Pag-IBIG Deduction:", results[3])
-    print("Tax Deduction:", results[4])
-    print("Total Deductions:", results[5])
-    print("Net Salary:", results[6])
-
-
+#user input
 salary = float(input("Enter your monthly salary: "))
-sss =  float(input("Enter SSS Deduction: "))
-pagibig =  float(input("Enter Pag-ibig Deduction: "))
+sss = float(input("Enter SSS Deduction: "))
+pagibig = float(input("Enter Pag-IBIG Deduction: "))
 
-
-results = compute_deductions(salary, sss, pagibig)
-
-display(results)
-
-#Akong rang gi change kay gipahimoan nakog functions ang pag display, 
+#compute and display results, direct function call
+display_breakdown(calculate_deductions(salary, sss, pagibig))
